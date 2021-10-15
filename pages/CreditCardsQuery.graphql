@@ -1,0 +1,6 @@
+query CreditCardQuery {
+  creditCards {
+    id
+    creditCardName
+  }
+}

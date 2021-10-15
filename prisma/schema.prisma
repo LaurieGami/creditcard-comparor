@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String?  @unique
+  image     String?
+  role      Role     @default(USER)
+  bookmarks Link[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Link {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  title       String
+  description String
+  url         String
+  imageUrl    String
+  category    String
+  users User[]
+}
+
+model CreditCard {
+  id Int @id @default(autoincrement())
+  creditCardName String
+  benefits CreditCardBenefit[]
+}
+
+model Benefit {
+  id Int @id @default(autoincrement())
+  name  String
+  benefitCashback Float
+  creditCards CreditCardBenefit[]
+  merchantCategoryCode BenefitMerchantCategoryCode[]
+}
+
+model CreditCardBenefit {
+  benefitId Int
+  creditCardId Int
+  benefit Benefit @relation(fields: [benefitId], references: [id])
+  creditCard CreditCard @relation(fields: [creditCardId], references: [id])
+
+  @@id([benefitId, creditCardId])
+}
+
+model BenefitMerchantCategoryCode {
+  benefitId Int
+  merchantCategoryCodeId Int
+  benefit   Benefit @relation(fields: [benefitId], references: [id])
+  merchantCategory MerchantCategoryCode @relation(fields: [merchantCategoryCodeId], references: [id])
+
+  @@id([benefitId, merchantCategoryCodeId])
+}
+
+model MerchantCategoryCode {
+  id Int @id @default(autoincrement())
+  merchantCategoryCode Int
+  merchantCategory String
+  merchants Merchant[]
+  benefit BenefitMerchantCategoryCode[]
+}
+
+model Merchant {
+  id Int @id @default(autoincrement())
+  merchantName String
+  merchantCategoryCode MerchantCategoryCode @relation(fields: [merchantCodeId], references: [id])
+  merchantCodeId Int
+}
+
