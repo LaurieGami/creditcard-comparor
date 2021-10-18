@@ -2,4 +2,4 @@
 cd /home/ec2-user/creditcard-comparor
 npm install
 npm run build
-npm run start
+sudo pm2 start npm -- start
