@@ -17,6 +17,9 @@
   "dependencies": {
     "@apollo/client": "^3.4.5",
     "@auth0/nextjs-auth0": "^1.5.0",
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
+    "@mui/material": "^5.0.4",
     "@prisma/client": "^2.28.0",
     "apollo-server-micro": "^3.0.1",
     "aws-sdk": "^2.947.0",
@@ -24,7 +27,7 @@
     "graphql": "^15.5.1",
     "micro": "^9.3.4",
     "micro-cors": "^0.1.1",
-    "next": "11.0.1",
+    "next": "^11.1.2",
     "nexus": "^1.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
