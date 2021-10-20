@@ -17,13 +17,28 @@ type Link {
   users: [User]
 }
 
+type Merchant {
+  id: Int
+  merchantCodeId: Int
+  merchantName: String
+}
+
+type MerchantCategoryCode {
+  id: Int
+  merchantCategory: String
+  merchantCategoryCode: Int
+}
+
 type Mutation {
   addCreditCard(creditCardName: String!): CreditCard!
+  addMerchant(merchantCategoryCode: Int!, merchantName: String!): Merchant!
 }
 
 type Query {
   creditCards: [CreditCard]!
   links: [Link]!
+  merchantCategoryCodes: [MerchantCategoryCode]!
+  merchants: [Merchant]!
 }
 
 enum Role {
