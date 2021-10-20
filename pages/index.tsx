@@ -1,5 +1,7 @@
 import Head from 'next/head';
 
+import CreditCardSelector from '../components/CreditCardSelector';
+
 export default function Home() {
   return (
     <div>
@@ -7,7 +9,7 @@ export default function Home() {
         <title>Credit Card Comparator</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1>Credit Card Comparator</h1>
+      <CreditCardSelector />
     </div>
   );
 }
