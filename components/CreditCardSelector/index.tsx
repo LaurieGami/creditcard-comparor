@@ -4,7 +4,7 @@ import { useQuery, useMutation } from '@apollo/client';
 // import { AddCreditCard, AddCreditCardVariables } from './__generated__/AddCreditCard';
 // import { AllDataQuery } from './__generated__/AllDataQuery';
 import { GET_ALL_DATA } from '../Admin/AdminQueries';
-import { Card, CardContent, Button, Checkbox, FormControl, Select, MenuItem, TextField, CardHeader } from '@mui/material';
+import { Card, CardContent, CardHeader, Grid, Button, Checkbox, FormControl, Select, MenuItem, TextField, Container } from '@mui/material';
 
 export default function Admin() {
     const { data, loading, error, refetch } = useQuery(GET_ALL_DATA);
@@ -55,20 +55,28 @@ export default function Admin() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <div>
+            <Container maxWidth="md" component="main">
                 <h2>Select the credit cards you'd like to compare:</h2>
 
                 <form onSubmit={handleSubmit}>
                     {data.creditCards.map((card) => (
-                        <Card key={card.id}>
-                            <CardContent>
-                                <CardHeader title={card.creditCardName}>
-                                    <h3>{card.creditCardName}</h3>
-                                </CardHeader>
-                                <div>Image Placeholder</div>
-                                <Checkbox id={card.id} name={card.creditCardName} value={card.id} onChange={handleCreditCardsSelection} />
-                            </CardContent>
-                        </Card>
+                        <Grid
+                            item
+                            key={card.id}
+                            xs={12}
+                            sm={6}
+                            md={4}
+                        >
+                            <Card>
+                                <CardContent>
+                                    <CardHeader title={card.creditCardName}>
+                                        <h3>{card.creditCardName}</h3>
+                                    </CardHeader>
+                                    <div>Image Placeholder</div>
+                                    <Checkbox id={card.id} name={card.creditCardName} value={card.id} onChange={handleCreditCardsSelection} />
+                                </CardContent>
+                            </Card>
+                        </Grid>
                     ))}
 
 
@@ -105,7 +113,7 @@ export default function Admin() {
                         Search
                     </Button>
                 </form>
-            </div>
+            </Container>
         </div>
     );
 }
