@@ -16,6 +16,15 @@ export const GET_ALL_DATA = gql`
       merchantCategory
       merchantCategoryCode
     }
+    benefits {
+      benefitCashback
+      name
+      id
+    }
+    creditCardBenefits {
+      benefitId
+      creditCardId
+    }
   }
 `;
 
@@ -32,6 +41,25 @@ export const ADD_MERCHANT = gql`
     addMerchant(merchantName: $merchantName, merchantCategoryCode: $merchantCategoryCode) {
       merchantName
       merchantCodeId
+    }
+  }
+`;
+
+export const ADD_BENEFIT = gql`
+  mutation AddBenefit($benefitName: String!, $benefitCashback: Float!, $merchantCodeId: Int!) {
+    addBenefit(benefitName: $benefitName, benefitCashback: $benefitCashback, merchantCodeId: $merchantCodeId) {
+      id
+      name
+      benefitCashback
+    }
+  }
+`;
+
+export const ADD_CREDIT_CARD_BENEFIT = gql`
+  mutation AddCreditCardBenefit($benefitId: Int!, $creditCardId: Int!) {
+    addCreditCardBenefit(benefitId: $benefitId, creditCardId: $creditCardId) {
+      benefitId
+      creditCardId
     }
   }
 `;

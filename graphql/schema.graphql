@@ -2,9 +2,20 @@
 ### Do not make changes to this file directly
 
 
+type Benefit {
+  benefitCashback: Float
+  id: Int
+  name: String
+}
+
 type CreditCard {
   creditCardName: String
   id: Int
+}
+
+type CreditCardBenefit {
+  benefitId: Int
+  creditCardId: Int
 }
 
 type Link {
@@ -30,11 +41,15 @@ type MerchantCategoryCode {
 }
 
 type Mutation {
+  addBenefit(benefitCashback: Float!, benefitName: String!, merchantCodeId: Int!): Benefit!
   addCreditCard(creditCardName: String!): CreditCard!
+  addCreditCardBenefit(benefitId: Int!, creditCardId: Int!): CreditCardBenefit!
   addMerchant(merchantCategoryCode: Int!, merchantName: String!): Merchant!
 }
 
 type Query {
+  benefits: [Benefit]!
+  creditCardBenefits: [CreditCardBenefit]!
   creditCards: [CreditCard]!
   links: [Link]!
   merchantCategoryCodes: [MerchantCategoryCode]!

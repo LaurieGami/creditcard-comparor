@@ -27,8 +27,23 @@ export interface AllDataQuery_merchantCategoryCodes {
   merchantCategoryCode: number | null;
 }
 
+export interface AllDataQuery_benefits {
+  __typename: "Benefit";
+  benefitCashback: number | null;
+  name: string | null;
+  id: number | null;
+}
+
+export interface AllDataQuery_creditCardBenefits {
+  __typename: "CreditCardBenefit";
+  benefitId: number | null;
+  creditCardId: number | null;
+}
+
 export interface AllDataQuery {
   creditCards: (AllDataQuery_creditCards | null)[];
   merchants: (AllDataQuery_merchants | null)[];
   merchantCategoryCodes: (AllDataQuery_merchantCategoryCodes | null)[];
+  benefits: (AllDataQuery_benefits | null)[];
+  creditCardBenefits: (AllDataQuery_creditCardBenefits | null)[];
 }
