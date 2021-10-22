@@ -1,6 +1,6 @@
 import Head from 'next/head';
-import { useState, useCallback, useEffect } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import { useState, useCallback } from 'react';
+import { useQuery } from '@apollo/client';
 // import { AddCreditCard, AddCreditCardVariables } from './__generated__/AddCreditCard';
 // import { AllDataQuery } from './__generated__/AllDataQuery';
 import { GET_ALL_DATA } from '../Admin/AdminQueries';
@@ -12,13 +12,6 @@ export default function Admin() {
     const [selectedCreditCards, setSelectedCreditCards] = useState([]);
     const [selectedMerchant, setSelectedMerchant] = useState('');
     const [shoppingValue, setShoppingValue] = useState(0);
-
-    // useEffect(() => {
-    //     if (addCreditCardData) {
-    //         setCreditCardName('');
-    //         refetch();
-    //     }
-    // }, [addCreditCardData]);
 
     const handleCreditCardsSelection = (event) => {
         if (event.target.checked) {
@@ -59,7 +52,7 @@ export default function Admin() {
                     <Grid container spacing={2}>
                         {data.creditCards.map((card) => {
                             return (
-                                <Grid item key={card.id} xs={4}>
+                                <Grid item key={card.id} xs={4} sm={3}>
                                     <Card>
                                         <CardContent>
                                             <CardHeader title={card.creditCardName}>
@@ -78,16 +71,14 @@ export default function Admin() {
 
                     <FormControl>
                         <Select labelId="merchant" id="merchants-selection" value={selectedMerchant} onChange={handleMerchantSelection}>
-                            <MenuItem value="Starbucks">Starbucks</MenuItem>
-                            <MenuItem value="Costco">Costco</MenuItem>
-                            <MenuItem value="Walmart">Walmart</MenuItem>
+                            {data.merchants.map((merchant) => (
+                                <MenuItem key={merchant.id} value={merchant.id}>{merchant.merchantName}</MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
 
                     <h2>How much will you be spending there?</h2>
                     <TextField id="shopping-value" name="shopping-value" value={shoppingValue} type="number" onChange={handleShoppingValue} />
-
-                    {/* <input type="number" id="shopping-value" name="shopping-value" value={shoppingValue} onChange={handleShoppingValue} /> */}
 
                     <Button type="submit" variant="contained">
                         Search
