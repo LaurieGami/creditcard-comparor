@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 const execute = (fn, name) => {
   return fn().then((result) => {
@@ -12,20 +12,20 @@ const demoDb = async (prisma: PrismaClient) => {
     () =>
       prisma.merchant.findFirst({
         where: {
-          merchantName: "Starbucks",
+          merchantName: 'Starbucks',
         },
       }),
-    "Starbucks"
+    'Starbucks'
   );
 
   const creditCard = await execute(
     () =>
       prisma.creditCard.findFirst({
         where: {
-          creditCardName: "Discover It",
+          creditCardName: 'Discover It',
         },
       }),
-    "Credit Card Discover It"
+    'Credit Card Discover It'
   );
 
   const result = await execute(
@@ -33,7 +33,7 @@ const demoDb = async (prisma: PrismaClient) => {
       prisma.benefit.findFirst({
         where: {
           creditCards: {
-            every: {
+            some: {
               creditCardId: creditCard.id,
             },
           },
@@ -44,12 +44,10 @@ const demoDb = async (prisma: PrismaClient) => {
           },
         },
       }),
-    "credit card benefit"
+    'credit card benefit'
   );
 
-  console.log(
-    `The estimated benefit when spending $5 is \$${result.benefitCashback * 5}`
-  );
+  console.log(`The estimated benefit when spending $5 is \$${result.benefitCashback * 5}`);
 };
 
 export default demoDb;
