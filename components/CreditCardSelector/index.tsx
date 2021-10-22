@@ -59,7 +59,7 @@ export default function Admin() {
                     <Grid container spacing={2}>
                         {data.creditCards.map((card) => {
                             return (
-                                <Grid item key={card.id}>
+                                <Grid item key={card.id} xs={4}>
                                     <Card>
                                         <CardContent>
                                             <CardHeader title={card.creditCardName}>
