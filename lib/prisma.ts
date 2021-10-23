@@ -1,5 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-import demoDb from "./demo";
+import { PrismaClient } from '@prisma/client';
 
 // PrismaClient is attached to the `global` object in development to prevent
 // exhausting your database connection limit.
@@ -7,7 +6,7 @@ import demoDb from "./demo";
 
 let prisma: PrismaClient;
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === 'production') {
   prisma = new PrismaClient();
 } else {
   if (!global.prisma) {
@@ -15,12 +14,5 @@ if (process.env.NODE_ENV === "production") {
   }
   prisma = global.prisma;
 }
-
-/**
- * Scenario,
- *
- * User swiped credit card at Starbucks with their Discover IT card. Calculate cashback.
- */
-demoDb(prisma);
 
 export default prisma;

@@ -37,6 +37,7 @@
     "@types/micro-cors": "^0.1.2",
     "@types/node": "^16.3.2",
     "@types/react": "^17.0.14",
+    "apollo": "^2.33.6",
     "autoprefixer": "^10.3.1",
     "babel-plugin-superjson-next": "^0.3.0",
     "concurrently": "^6.3.0",

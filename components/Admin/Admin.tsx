@@ -6,14 +6,18 @@ import { AddMerchant, AddMerchantVariables } from './__generated__/AddMerchant';
 import { AddCreditCardBenefit, AddCreditCardBenefitVariables } from './__generated__/AddCreditCardBenefit';
 import { AddBenefit, AddBenefitVariables } from './__generated__/AddBenefit';
 import { AllDataQuery } from './__generated__/AllDataQuery';
-import { ADD_CREDIT_CARD, ADD_MERCHANT, ADD_BENEFIT, ADD_CREDIT_CARD_BENEFIT, GET_ALL_DATA } from './AdminQueries';
+import { AddMerchantCategoryCode, AddMerchantCategoryCodeVariables } from './__generated__/AddMerchantCategoryCode';
+import { ADD_CREDIT_CARD, ADD_MERCHANT, ADD_BENEFIT, ADD_CREDIT_CARD_BENEFIT, GET_ALL_DATA, ADD_MERCHANT_CATEGORY_CODE } from './AdminQueries';
 import SelectComponent, { SelectType } from './SelectComponent';
+import Form from './Form';
 
 enum InputType {
   MERCHANT = 'MERCHANT',
   CREDIT_CARD = 'CREDIT_CARD',
   BENEFIT_NAME = 'BENEFIT_NAME',
   BENEFIT_CASHBACK = 'BENEFIT_CASHBACK',
+  MERCHANT_CATEGORY = 'MERCHANT_CATEGORY',
+  MERCHANT_CATEGORY_CODE = 'MERCHANT_CATEGORY_CODE',
 }
 
 enum BenefitAction {
@@ -68,6 +72,10 @@ export default function Admin() {
   const [addMerchant, { data: addMerchantData, loading: addMerchantLoading, error: addMerchantError }] = useMutation<AddMerchant, AddMerchantVariables>(
     ADD_MERCHANT
   );
+  const [addMerchantCategoryCode, { data: addMerchantCategoryData, loading: addMerchantCategoryLoading, error: addMerchantCategoryError }] = useMutation<
+    AddMerchantCategoryCode,
+    AddMerchantCategoryCodeVariables
+  >(ADD_MERCHANT_CATEGORY_CODE);
   const [addBenefit, { data: addBenefitData, loading: addBenefitLoading, error: addBenefitError }] = useMutation<AddBenefit, AddBenefitVariables>(ADD_BENEFIT);
   const [addCreditCardBenefit, { data: addCreditCardBenefitData, loading: addCreditCardBenefitLoading, error: addCreditCardBenefitError }] = useMutation<
     AddCreditCardBenefit,
@@ -80,6 +88,8 @@ export default function Admin() {
   const [merchantCategoryCode, setMerchantCategoryCode] = useState<string>('');
   const [creditCardSelection, setCreditCardSelection] = useState<string>('');
   const [benefitSelection, setBenefitSelection] = useState<string>('');
+  const [merchantCategory, setMerchantCategory] = useState<string>('');
+  const [newMerchantCategoryCode, setNewMerchantCategoryCode] = useState<number | undefined>();
   const [state, dispatch] = useReducer(reducer, initialBenefitState);
 
   useEffect(() => {
@@ -89,13 +99,15 @@ export default function Admin() {
       setMerchantCategoryCode('');
       setCreditCardSelection('');
       setBenefitSelection('');
+      setMerchantCategory('');
+      setNewMerchantCategoryCode(undefined);
       refetch();
       setOnSuccessfulApiResponse(true);
       dispatch({
         type: BenefitAction.RESET,
       });
     }
-  }, [addCreditCardData, addMerchantData, addCreditCardBenefitData, addBenefitData]);
+  }, [addCreditCardData, addMerchantData, addCreditCardBenefitData, addBenefitData, addMerchantCategoryData]);
 
   useEffect(() => {
     if (onSuccessfulApiResponse) {
@@ -128,6 +140,19 @@ export default function Admin() {
       });
     },
     [merchantName, merchantCategoryCode]
+  );
+
+  const onMerchantCategoryCodeSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
+      addMerchantCategoryCode({
+        variables: {
+          merchantCategoryCode: +newMerchantCategoryCode,
+          merchantCategory: merchantCategory,
+        },
+      });
+    },
+    [newMerchantCategoryCode, merchantCategory]
   );
 
   const onBenefitSubmit = useCallback(
@@ -195,6 +220,10 @@ export default function Admin() {
         type: BenefitAction.UPDATE_BENEFIT_CASHBACK,
         data: val,
       });
+    } else if (inputType === InputType.MERCHANT_CATEGORY) {
+      setMerchantCategory(val);
+    } else if (inputType === InputType.MERCHANT_CATEGORY_CODE) {
+      setNewMerchantCategoryCode(+val);
     }
   }, []);
 
@@ -228,7 +257,9 @@ export default function Admin() {
             return (
               <li key={card.id}>
                 <div>
-                  <p>{card.creditCardName}</p>
+                  <p>
+                    {card.creditCardName} <sup>{card.id}</sup>
+                  </p>
                   {Array.isArray(benefits) && benefits.length ? (
                     <ul>
                       {benefits.map((benefit) => {
@@ -241,35 +272,72 @@ export default function Admin() {
             );
           })}
         </ul>
-        <h3>Add Credit Card</h3>
-        <form onSubmit={onSubmit}>
-          <label>
-            Name:{' '}
-            <input
-              type="text"
-              data-input={InputType.CREDIT_CARD}
-              value={creditCardName}
-              onChange={onChange}
-              disabled={!!loading || !!addCreditCardLoading}
-              placeholder="Citi Double Cash"
-            />
-          </label>{' '}
-          <input type="submit" value="Submit" disabled={!!loading || !!addCreditCardLoading} />
-          {addCreditCardError && <p>Unable to add credit card, please try again later.</p>}
-        </form>
-        <hr />
+        <Form
+          isLoading={!!loading || !!addCreditCardLoading}
+          onSubmit={onSubmit}
+          formName="Add Credit Card"
+          error={addCreditCardError ? 'Unable to add credit card, please try again later.' : undefined}
+        >
+          <label>Name: </label>
+          <input
+            type="text"
+            data-input={InputType.CREDIT_CARD}
+            value={creditCardName}
+            onChange={onChange}
+            disabled={!!loading || !!addCreditCardLoading}
+            placeholder="Citi Double Cash"
+          />
+        </Form>
+
+        <Form
+          isLoading={!!loading || !!addMerchantCategoryLoading}
+          onSubmit={onMerchantCategoryCodeSubmit}
+          formName="Add Merchant Category Code"
+          error={addMerchantCategoryError ? 'Unable to add merchant category code, please try again later.' : undefined}
+        >
+          <label>Category Code: </label>
+          <input
+            type="number"
+            data-input={InputType.MERCHANT_CATEGORY_CODE}
+            value={newMerchantCategoryCode}
+            onChange={onChange}
+            disabled={!!loading || !!addMerchantCategoryLoading}
+            placeholder="8849"
+          />
+          <br />
+
+          <label>Merchant Category Name: </label>
+          <input
+            type="text"
+            data-input={InputType.MERCHANT_CATEGORY}
+            value={merchantCategory}
+            onChange={onChange}
+            disabled={!!loading || !!addMerchantCategoryLoading}
+            placeholder="Restaurants"
+          />
+        </Form>
+
         <h2>Merchants</h2>
         <ul>
-          {data.merchants.map((merchant) => (
-            <li key={merchant.id}>
-              <p>{merchant.merchantName}</p>
-            </li>
-          ))}
+          {data.merchants.map((merchant) => {
+            const merchantCategoryCodeData = data.merchantCategoryCodes.find((code) => code.id === merchant.merchantCodeId);
+            return (
+              <li key={merchant.id}>
+                <p>
+                  {merchant.merchantName} ({merchantCategoryCodeData.merchantCategory} - {merchantCategoryCodeData.merchantCategoryCode})
+                  <sup>{merchant.id}</sup>
+                </p>
+              </li>
+            );
+          })}
         </ul>
 
-        <h2>Add Merchant</h2>
-        <form onSubmit={onMerchantSubmit}>
-          <label>Merchant Name: </label>{' '}
+        <Form
+          isLoading={!!loading || !!addMerchantLoading}
+          onSubmit={onMerchantSubmit}
+          formName="Add Merchant"
+          error={addMerchantError ? 'Unable to add merchant, please try again later.' : undefined}
+        >
           <input
             type="text"
             data-input={InputType.MERCHANT}
@@ -290,16 +358,13 @@ export default function Admin() {
               {data.merchantCategoryCodes.map((merchantCategoryCode) => {
                 return (
                   <option key={merchantCategoryCode.id} value={merchantCategoryCode.id}>
-                    {merchantCategoryCode.merchantCategory}
+                    {merchantCategoryCode.merchantCategory} ({merchantCategoryCode.merchantCategoryCode})
                   </option>
                 );
               })}
             </>
           </SelectComponent>
-          <input type="submit" value="Submit" disabled={!!loading || !!addMerchantLoading} />
-          {addMerchantError && <p>Unable to add merchant, please try again later.</p>}
-        </form>
-
+        </Form>
         <hr />
         <h2>Add Benefit</h2>
         <form onSubmit={onBenefitSubmit}>

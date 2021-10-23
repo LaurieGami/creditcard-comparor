@@ -8,6 +8,15 @@ type Benefit {
   name: String
 }
 
+type Cashback {
+  benefitName: String
+  cashback: Float
+  creditCardId: Int
+  creditCardName: String
+  merchantId: Int
+  merchantName: String
+}
+
 type CreditCard {
   creditCardName: String
   id: Int
@@ -45,6 +54,12 @@ type Mutation {
   addCreditCard(creditCardName: String!): CreditCard!
   addCreditCardBenefit(benefitId: Int!, creditCardId: Int!): CreditCardBenefit!
   addMerchant(merchantCategoryCode: Int!, merchantName: String!): Merchant!
+  addMerchantCategoryCode(merchantCategory: String!, merchantCategoryCode: Int!): MerchantCategoryCode!
+
+  """
+  Calculates the cashback amount of a purchase given a merchant, credit card, and purchase amount.
+  """
+  calculateCashback(creditCardId: Int!, merchantId: Int!, purchaseAmount: Float!): Cashback!
 }
 
 type Query {

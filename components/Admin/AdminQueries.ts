@@ -63,3 +63,13 @@ export const ADD_CREDIT_CARD_BENEFIT = gql`
     }
   }
 `;
+
+export const ADD_MERCHANT_CATEGORY_CODE = gql`
+  mutation AddMerchantCategoryCode($merchantCategoryCode: Int!, $merchantCategory: String!) {
+    addMerchantCategoryCode(merchantCategoryCode: $merchantCategoryCode, merchantCategory: $merchantCategory) {
+      id
+      merchantCategory
+      merchantCategoryCode
+    }
+  }
+`;

@@ -1,18 +1,18 @@
-import { objectType, extendType, nonNull, stringArg } from "nexus";
+import { objectType, extendType, nonNull, stringArg } from 'nexus';
 
 export const CreditCard = objectType({
-  name: "CreditCard",
+  name: 'CreditCard',
   definition(t) {
-    t.int("id");
-    t.string("creditCardName");
+    t.int('id');
+    t.string('creditCardName');
   },
 });
 
 export const CreditCardQuery = extendType({
-  type: "Query",
+  type: 'Query',
   definition(t) {
-    t.nonNull.list.field("creditCards", {
-      type: "CreditCard",
+    t.nonNull.list.field('creditCards', {
+      type: 'CreditCard',
       resolve(_parent, _args, ctx) {
         return ctx.prisma.creditCard.findMany();
       },
@@ -21,10 +21,10 @@ export const CreditCardQuery = extendType({
 });
 
 export const AddCreditCardMutation = extendType({
-  type: "Mutation",
+  type: 'Mutation',
   definition(t) {
-    t.nonNull.field("addCreditCard", {
-      type: "CreditCard",
+    t.nonNull.field('addCreditCard', {
+      type: 'CreditCard',
       args: {
         creditCardName: nonNull(stringArg()),
       },

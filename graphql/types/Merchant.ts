@@ -48,7 +48,7 @@ export const AddMerchantMutation = extendType({
             throw new Error('Unable to find merchant category code');
           }
         } catch (e) {
-          return Promise.reject('Unable to find associated category code');
+          return Promise.reject(e instanceof Error ? e : new Error('Unable to find associated category code'));
         }
 
         const draft = {
